@@ -1,10 +1,7 @@
 ﻿// UI Culling for Unity. Copyright (c) 2022 Peter Schraut (www.console-dev.de). See LICENSE.md
 // https://github.com/pschraut/UnityUICulling.git
 #pragma warning disable IDE1006 // Naming Styles
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Oddworm.Framework
 {
@@ -20,7 +17,10 @@ namespace Oddworm.Framework
 		[Tooltip("Controls how to communicate with Unity's OnBecameVisible and OnBecameInvisible magic-methods.\n\nSend:\nAll Components on this GameObject receive the message.\n\nBroadcast:\nAll Components on this GameObject and all its children receive the message. This option is more expensive than 'Send'.\n\nNone:\nNo message is being sent to OnBecameVisible and OnBecameInvisible.")]
 		[SerializeField] MessageMode m_MessageMode = MessageMode.Broadcast;
 
-        public RectTransform rect
+		[Space]
+		[SerializeField] VisibilityChangedBoolEvent m_OnVisibilityChanged;
+
+		public RectTransform rect
         {
 			get => m_Rect;
 			set => m_Rect = value;
@@ -50,7 +50,22 @@ namespace Oddworm.Framework
 		/// The event is triggered when the visibility changed.
 		/// The event is triggered even when <see cref="messageMode"/> is set to <see cref="MessageMode.None"/>.
 		/// </summary>
-		public System.Action<UICullingBehavior> onVisibleChanged;
+		public System.Action<UICullingBehavior> visibilityChanged;
+
+		/// <summary>
+		/// The Unity event that's triggered when the visibility changed.
+		/// The event is triggered even when <see cref="messageMode"/> is set to <see cref="MessageMode.None"/>.
+		/// </summary>
+		public VisibilityChangedBoolEvent onVisibilityChanged
+        {
+			get
+            {
+				if (m_OnVisibilityChanged == null)
+					m_OnVisibilityChanged = new VisibilityChangedBoolEvent();
+				return m_OnVisibilityChanged;
+			}
+			set => m_OnVisibilityChanged = value;
+		}
 
 		public enum MessageMode
 		{
@@ -60,6 +75,9 @@ namespace Oddworm.Framework
 			/// <summary>Use <see cref="GameObject.BroadcastMessage"/>.</summary>
 			Broadcast = 2
 		}
+
+		[System.Serializable]
+		public class VisibilityChangedBoolEvent : UnityEngine.Events.UnityEvent<bool> { }
 
 		// static cached to avoid garbage alloctions
 		static readonly Vector3[] s_CornerCache = new Vector3[4];
@@ -99,9 +117,6 @@ namespace Oddworm.Framework
 
 		void RaiseEvent()
         {
-			// Raise the C# event
-			onVisibleChanged?.Invoke(this);
-
 			// Raise the Unity magic-message event
 			var methodName = s_MagicMethodName[isVisible ? 1 : 0];
 			switch (m_MessageMode)
@@ -117,6 +132,13 @@ namespace Oddworm.Framework
 				default:
 					break;
 			}
+
+			// Rause Unity event
+			if (m_OnVisibilityChanged != null)
+				m_OnVisibilityChanged.Invoke(isVisible);
+
+			// Raise the C# event
+			visibilityChanged?.Invoke(this);
 		}
 
 		/// <summary>
