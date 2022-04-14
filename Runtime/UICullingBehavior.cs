@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿// UI Culling for Unity. Copyright (c) 2022 Peter Schraut (www.console-dev.de). See LICENSE.md
+// https://github.com/pschraut/UnityUICulling.git
+#pragma warning disable IDE1006 // Naming Styles
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,14 +9,19 @@ using UnityEngine.UI;
 namespace Oddworm.Framework
 {
 	[DefaultExecutionOrder(1000)] // Run after default Components, because these might modify the position
-	public class UICullingBehavior : MonoBehaviour
-	{
+	public class UICullingBehavior : UnityEngine.EventSystems.UIBehaviour
+    {
+		[Tooltip("When the 'Rect' is inside the 'Viewport', the 'Rect' is considered visible.")]
 		[SerializeField] RectTransform m_Rect;
-		[SerializeField] RectTransform m_Viewport;
-		[SerializeField] MessageMode m_MessageMode = MessageMode.SendMessage;
 
-		public RectTransform rect
-		{
+		[Tooltip("When the 'Rect' is inside the 'Viewport', the 'Rect' is considered visible.")]
+		[SerializeField] RectTransform m_Viewport;
+
+		[Tooltip("Controls how to communicate with Unity's OnBecameVisible and OnBecameInvisible magic-methods.\n\nSend:\nAll Components on this GameObject receive the message.\n\nBroadcast:\nAll Components on this GameObject and all its children receive the message. This option is more expensive than 'Send'.\n\nNone:\nNo message is being sent to OnBecameVisible and OnBecameInvisible.")]
+		[SerializeField] MessageMode m_MessageMode = MessageMode.Broadcast;
+
+        public RectTransform rect
+        {
 			get => m_Rect;
 			set => m_Rect = value;
 		}
@@ -30,61 +38,53 @@ namespace Oddworm.Framework
 			set => m_MessageMode = value;
         }
 
+		/// <summary>
+		/// Gets whether the rect is inside the viewport, thus visible.
+		/// </summary>
 		public bool isVisible
         {
 			get => m_IsVisible > 0;
 		}
 
+		/// <summary>
+		/// The event is triggered when the visibility changed.
+		/// The event is triggered even when <see cref="messageMode"/> is set to <see cref="MessageMode.None"/>.
+		/// </summary>
 		public System.Action<UICullingBehavior> onVisibleChanged;
 
 		public enum MessageMode
 		{
 			None = 0,
-			SendMessage = 1,
-			BroadcastMessage = 2
+			/// <summary>Use <see cref="GameObject.SendMessage"/>.</summary>
+			Send = 1,
+			/// <summary>Use <see cref="GameObject.BroadcastMessage"/>.</summary>
+			Broadcast = 2
 		}
 
 		// static cached to avoid garbage alloctions
-		static Vector3[] s_CornerCache = new Vector3[4];
+		static readonly Vector3[] s_CornerCache = new Vector3[4];
 
 		// The MonoBehavior magic-method names from Unity
 		// https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnBecameVisible.html
-		static string[] s_MagicMethodName = new[]
+		static readonly string[] s_MagicMethodName = new[]
 		{
 			"OnBecameInvisible",
 			"OnBecameVisible"
 		};
 
-		// We use an int instead of bool, so we can differentiate
-		// between visible, invisible and uninitialized which is the case
-		// when the component gets enabled the first time.
+		// We use an integer instead of boolean, so we can differentiate
+		// between visible, invisible and uninitialized (when component is first enabled).
 		int m_IsVisible = -1;
 
-		protected virtual void OnEnable()
+		protected override void OnEnable()
 		{
+			base.OnEnable();
 			UpdateIsVisible();
-		}
-
-		protected virtual void OnDisable()
-		{
 		}
 
 		protected virtual void LateUpdate()
         {
 			UpdateIsVisible();
-		}
-
-		protected virtual void OnValidate()
-		{
-			if (m_Rect == null)
-			{
-				m_Rect = GetComponent<RectTransform>();
-
-#if UNITY_EDITOR
-				if (!Application.isPlaying)
-					UnityEditor.EditorUtility.SetDirty(this);
-#endif
-			}
 		}
 
 		void UpdateIsVisible()
@@ -106,11 +106,11 @@ namespace Oddworm.Framework
 			var methodName = s_MagicMethodName[isVisible ? 1 : 0];
 			switch (m_MessageMode)
             {
-				case MessageMode.SendMessage:
+				case MessageMode.Send:
 					gameObject.SendMessage(methodName, SendMessageOptions.DontRequireReceiver);
 					break;
 
-				case MessageMode.BroadcastMessage:
+				case MessageMode.Broadcast:
 					gameObject.BroadcastMessage(methodName, SendMessageOptions.DontRequireReceiver);
 					break;
 
@@ -148,6 +148,21 @@ namespace Oddworm.Framework
 				s_CornerCache[0].y,
 				s_CornerCache[2].x - s_CornerCache[0].x,
 				s_CornerCache[2].y - s_CornerCache[0].y);
+		}
+
+		protected override void OnValidate()
+		{
+			base.OnValidate();
+
+			if (m_Rect == null)
+			{
+				m_Rect = GetComponent<RectTransform>();
+
+#if UNITY_EDITOR
+				if (!Application.isPlaying)
+					UnityEditor.EditorUtility.SetDirty(this);
+#endif
+			}
 		}
 	}
 }
