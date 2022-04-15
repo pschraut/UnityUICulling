@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Oddworm.Framework
 {
 	[DefaultExecutionOrder(1000)] // Run after default Components, because these might modify the position
-	public class UICullingBehavior : UnityEngine.EventSystems.UIBehaviour
+	public class UICullingBehaviour : UnityEngine.EventSystems.UIBehaviour
     {
 		[Tooltip("When the 'Rect' is inside the 'Viewport', the 'Rect' is considered visible.")]
 		[SerializeField] RectTransform m_Rect;
@@ -50,7 +50,7 @@ namespace Oddworm.Framework
 		/// The event is triggered when the visibility changed.
 		/// The event is triggered even when <see cref="messageMode"/> is set to <see cref="MessageMode.None"/>.
 		/// </summary>
-		public System.Action<UICullingBehavior> visibilityChanged;
+		public System.Action<UICullingBehaviour> visibilityChanged;
 
 		/// <summary>
 		/// The Unity event that's triggered when the visibility changed.
