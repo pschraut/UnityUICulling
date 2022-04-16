@@ -14,11 +14,18 @@ namespace Oddworm.Framework
 		[Tooltip("When the 'Rect' is inside the 'Viewport', the 'Rect' is considered visible.")]
 		[SerializeField] RectTransform m_Viewport;
 
-		[Tooltip("Controls how to communicate with Unity's OnBecameVisible and OnBecameInvisible magic-methods.\n\nSend:\nAll Components on this GameObject receive the message.\n\nBroadcast:\nAll Components on this GameObject and all its children receive the message. This option is more expensive than 'Send'.\n\nNone:\nNo message is being sent to OnBecameVisible and OnBecameInvisible.")]
-		[SerializeField] MessageMode m_MessageMode = MessageMode.Broadcast;
+		[Tooltip("Specifies how to communicate with Unity's OnBecameVisible and OnBecameInvisible magic-method implementations.\n\nSend:\nAll Components on this GameObject receive the message.\n\nBroadcast:\nAll Components on this GameObject and all its children receive the message. This option is more expensive than 'Send'.\n\nNone:\nNo message is being sent.")]
+		[SerializeField] MessageMode m_MessageMode = MessageMode.Send;
 
 		[Space]
-		[SerializeField] VisibilityChangedBoolEvent m_OnVisibilityChanged;
+		[Tooltip("The event is raised when the 'Rect' became visible or invisible. 'Message Mode' doesn't affect this event.")]
+		[SerializeField] BoolEvent m_OnVisibleChanged;
+
+		[Tooltip("The event is raised when the 'Rect' became visible. 'Message Mode' doesn't affect this event.")]
+		[SerializeField] VoidEvent m_OnBecameVisible;
+
+		[Tooltip("The event is raised when the 'Rect' became invisible. 'Message Mode' doesn't affect this event.")]
+		[SerializeField] VoidEvent m_OnBecameInvisible;
 
 		public RectTransform rect
         {
@@ -47,24 +54,49 @@ namespace Oddworm.Framework
 		}
 
 		/// <summary>
-		/// The event is triggered when the visibility changed.
-		/// The event is triggered even when <see cref="messageMode"/> is set to <see cref="MessageMode.None"/>.
+		/// The event is raised when the rect became visible or invisible.
+		/// The bool argument specifies whether the rect became visible or invisible.
+		/// The <see cref="messageMode"/> doesn't affect this event.
 		/// </summary>
-		public System.Action<UICullingBehaviour> visibilityChanged;
-
-		/// <summary>
-		/// The Unity event that's triggered when the visibility changed.
-		/// The event is triggered even when <see cref="messageMode"/> is set to <see cref="MessageMode.None"/>.
-		/// </summary>
-		public VisibilityChangedBoolEvent onVisibilityChanged
+		public BoolEvent onVisibleChanged
         {
 			get
             {
-				if (m_OnVisibilityChanged == null)
-					m_OnVisibilityChanged = new VisibilityChangedBoolEvent();
-				return m_OnVisibilityChanged;
+				if (m_OnVisibleChanged == null)
+					m_OnVisibleChanged = new BoolEvent();
+				return m_OnVisibleChanged;
 			}
-			set => m_OnVisibilityChanged = value;
+			set => m_OnVisibleChanged = value;
+		}
+
+		/// <summary>
+		/// The event is raised when the rect became visible.
+		/// The <see cref="messageMode"/> doesn't affect this event.
+		/// </summary>
+		public VoidEvent onBecameVisible
+		{
+			get
+			{
+				if (m_OnBecameVisible == null)
+					m_OnBecameVisible = new VoidEvent();
+				return m_OnBecameVisible;
+			}
+			set => m_OnBecameVisible = value;
+		}
+
+		/// <summary>
+		/// The event is raised when the rect became invisible.
+		/// The <see cref="messageMode"/> doesn't affect this event.
+		/// </summary>
+		public VoidEvent onBecameInvisible
+		{
+			get
+			{
+				if (m_OnBecameInvisible == null)
+					m_OnBecameInvisible = new VoidEvent();
+				return m_OnBecameInvisible;
+			}
+			set => m_OnBecameInvisible = value;
 		}
 
 		public enum MessageMode
@@ -77,7 +109,10 @@ namespace Oddworm.Framework
 		}
 
 		[System.Serializable]
-		public class VisibilityChangedBoolEvent : UnityEngine.Events.UnityEvent<bool> { }
+		public class BoolEvent : UnityEngine.Events.UnityEvent<bool> { }
+
+		[System.Serializable]
+		public class VoidEvent : UnityEngine.Events.UnityEvent { }
 
 		// static cached to avoid garbage alloctions
 		static readonly Vector3[] s_CornerCache = new Vector3[4];
@@ -109,13 +144,13 @@ namespace Oddworm.Framework
         {
 			var visible = CalculateVisibility() ? 1 : 0;
 			if (visible == m_IsVisible)
-				return; // visbility didn't change
+				return; // visible didn't change
 
 			m_IsVisible = visible;
-			RaiseEvent();
+			RaiseEvents();
 		}
 
-		void RaiseEvent()
+		protected void RaiseEvents()
         {
 			// Raise the Unity magic-message event
 			var methodName = s_MagicMethodName[isVisible ? 1 : 0];
@@ -133,12 +168,15 @@ namespace Oddworm.Framework
 					break;
 			}
 
-			// Rause Unity event
-			if (m_OnVisibilityChanged != null)
-				m_OnVisibilityChanged.Invoke(isVisible);
+			// Raise Unity events
+			if (m_OnVisibleChanged != null)
+				m_OnVisibleChanged.Invoke(isVisible);
 
-			// Raise the C# event
-			visibilityChanged?.Invoke(this);
+			if (m_OnBecameVisible != null && isVisible)
+				m_OnBecameVisible.Invoke();
+
+			if (m_OnBecameInvisible != null && !isVisible)
+				m_OnBecameInvisible.Invoke();
 		}
 
 		/// <summary>
