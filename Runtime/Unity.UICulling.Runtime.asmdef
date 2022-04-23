@@ -1,0 +1,21 @@
+{
+    "name": "Unity.UICulling.Runtime",
+    "references": [
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.modules.ui",
+            "expression": "0.0.0",
+            "define": "ODDWORM_UGUI_PRESENT"
+        }
+    ],
+    "noEngineReferences": false
+}
