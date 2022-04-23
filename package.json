@@ -6,6 +6,7 @@
   "unity": "2019.3",
   "documentationUrl": "https://github.com/pschraut/UnityUICulling",
   "dependencies": {
+    "com.unity.ugui": "1.0.0"
   },
   "keywords": [
     "unity",
