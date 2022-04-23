@@ -2,9 +2,9 @@
 
 This package provides a Component that checks whether an uGUI widget is inside a specific RectTransform and allows to trigger OnBecameVisible and OnBecameInvisible magic-methods and events.
 
-These events are are often useful to toggle expensive logic, for example when the widget was moved inside or outside a ScrollView.
+These events are often useful to toggle expensive logic. For example to disable rendering (eg animated 3D character) to a RenderTexture that's shown in the UI, but was moved outisde the ScrollView.
 
-uGUI doesn't trigger the OnBecameVisible and OnBecameInvisible events on widgets. Unity Technologies was asked multiple times to implement it, but they chose not to do it, see [here](https://forum.unity.com/threads/onbecamevisible-does-not-fire-for-canvasrenderers.290641/#post-1918763) for details.
+uGUI doesn't trigger the OnBecameVisible and OnBecameInvisible events on widgets. Unity Technologies was asked to implement it, but it seems they chose not to do it, see [here](https://forum.unity.com/threads/onbecamevisible-does-not-fire-for-canvasrenderers.290641/#post-1918763).
 
 # Video
 Below you can find a YouTube video where I explain what the ```UICullingBehaviour``` can be used for.
@@ -33,6 +33,8 @@ In Unity's Package Manager, choose "Add package from git URL" and insert one of 
 
 ## Package URL's
 
+Please see the ```CHANGELOG.md``` file to see what's changed in each version.
+
 | Version  |     Link      |
 |----------|---------------|
 | 1.0.0-pre.1 | https://github.com/pschraut/UnityUICulling.git#1.0.0-pre.1 |
@@ -41,7 +43,7 @@ In Unity's Package Manager, choose "Add package from git URL" and insert one of 
 # Credits
 
 If you find this package useful, please mention my name in your credits screen.
-Something like "UI Culling by Peter Schraut" or "Thanks to Peter Schraut" would be very much appreciated.
+Something like "UI Culling for Unity by Peter Schraut" or "Thanks to Peter Schraut" would be very much appreciated.
 
 # How it works
 
