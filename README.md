@@ -2,7 +2,7 @@
 
 This package provides a Component to trigger OnBecameVisible / OnBecameInvisible magic-methods and events, when an uGUI widget enters and exits a specific RectTransform.
 
-These events are often useful to toggle expensive logic. For example to disable a Camera that renders to a RenderTexture to display animated 3D characters in the UI, but was moved outisde a ScrollView.
+These events are often useful to toggle expensive logic. For example to disable a Camera that renders to a RenderTexture to display animated 3D characters in the UI, but was moved outisde the visible area of a ScrollView.
 
 uGUI doesn't trigger the OnBecameVisible and OnBecameInvisible events on widgets. Unity Technologies was asked to implement it, but it seems they didn't entirely implement it yet, see [here](https://forum.unity.com/threads/onbecamevisible-does-not-fire-for-canvasrenderers.290641/).
 
