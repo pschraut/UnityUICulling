@@ -114,10 +114,10 @@ namespace Oddworm.Framework
         [System.Serializable]
         public class VoidEvent : UnityEngine.Events.UnityEvent { }
 
-        // static cached to avoid garbage alloctions
+        // static cached array to avoid garbage alloctions
         static readonly Vector3[] s_CornerCache = new Vector3[4];
 
-        // The MonoBehavior magic-method names from Unity
+        // The MonoBehavior magic-method names from Unity, see documentation:
         // https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnBecameVisible.html
         static readonly string[] s_MagicMethodName = new[]
         {
@@ -197,6 +197,8 @@ namespace Oddworm.Framework
         /// </summary>
         protected Rect GetWorldRect(RectTransform rectTransform)
         {
+            // RectTransform.GetWorldCorners isn't particulary fast, see Unity thread:
+            // https://forum.unity.com/threads/case-1420752-recttransform-rect-very-expensive.1268918/
             rectTransform.GetWorldCorners(s_CornerCache);
 
             // s_CornerCache[0] = bottom left
