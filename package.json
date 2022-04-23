@@ -2,7 +2,7 @@
   "name": "com.oddworm.uiculling",
   "version": "1.0.0-pre.1",
   "displayName": "UI Culling",
-  "description": "A Component that triggers OnBecameVisible and InBecameInvisible events on UI widgets.",
+  "description": "A Component that triggers OnBecameVisible and OnBecameInvisible events on UI widgets.",
   "unity": "2019.3",
   "documentationUrl": "https://github.com/pschraut/UnityUICulling",
   "dependencies": {
