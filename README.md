@@ -1,8 +1,8 @@
 # UI Culling for Unity
 
-This package provides a Component that checks whether an uGUI widget is inside a specific RectTransform and allows to trigger OnBecameVisible and OnBecameInvisible magic-methods and uGUI events.
+This package provides a Component that to trigger OnBecameVisible / OnBecameInvisible magic-methods and events, when an uGUI widget enters and exits a specific RectTransform.
 
-These events are often useful to toggle expensive logic. For example to disable rendering to a RenderTexture that's shown in the UI (ie animated 3D character), but was moved outisde the ScrollView.
+These events are often useful to toggle expensive logic. For example to disable a Camera that renders to a RenderTexture to display animated 3D characters in the UI, but was moved outisde a ScrollView.
 
 uGUI doesn't trigger the OnBecameVisible and OnBecameInvisible events on widgets. Unity Technologies was asked to implement it, but it seems they chose not to do it, see [here](https://forum.unity.com/threads/onbecamevisible-does-not-fire-for-canvasrenderers.290641/#post-1918763).
 
@@ -51,8 +51,9 @@ The ```UICullingBehaviour``` implements [LateUpdate](https://docs.unity3d.com/Sc
 
 This check is performed always (per frame), even when the uGUI widget is outside the screen.
 
-It seems I'm unable to get rid of the per-frame check, because Unity doesn't provide a callback when a Transform position changed. If you know how to get rid of it, please open an issue item with the solution.
+It seems I can't get rid of the per-frame check, because Unity doesn't provide a callback when a Transform position changed. If you know how to get rid of it, please open an issue item and let me know how that would work.
 
 # Samples
 
-In ```Samples~\Sample1.unitypackage``` you can find the sample that I also show in the video.
+The package comes with one sample project that can be installed from Unity's Package Manager when you select this package.
+Otherwise you can find it in the package directory in ```Samples~\Sample1.unitypackage```.
