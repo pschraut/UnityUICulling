@@ -4,7 +4,7 @@ This package provides a Component that to trigger OnBecameVisible / OnBecameInvi
 
 These events are often useful to toggle expensive logic. For example to disable a Camera that renders to a RenderTexture to display animated 3D characters in the UI, but was moved outisde a ScrollView.
 
-uGUI doesn't trigger the OnBecameVisible and OnBecameInvisible events on widgets. Unity Technologies was asked to implement it, but it seems they chose not to do it, see [here](https://forum.unity.com/threads/onbecamevisible-does-not-fire-for-canvasrenderers.290641/#post-1918763).
+uGUI doesn't trigger the OnBecameVisible and OnBecameInvisible events on widgets. Unity Technologies was asked to implement it, but it seems they didn't implement it yet, see [here](https://forum.unity.com/threads/onbecamevisible-does-not-fire-for-canvasrenderers.290641/#post-1918763).
 
 # Video
 Below you can find a YouTube video where I explain what the ```UICullingBehaviour``` can be used for.
