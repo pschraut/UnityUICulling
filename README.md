@@ -49,7 +49,7 @@ Something like "UI Culling for Unity by Peter Schraut" or "Thanks to Peter Schra
 
 The ```UICullingBehaviour``` implements [LateUpdate](https://docs.unity3d.com/ScriptReference/MonoBehaviour.LateUpdate.html) and transforms both RectTransform's, ```m_Rect``` and ```m_Viewport```, to world-space rectangles and checks whether they overlap.
 
-This check is performed always (per frame), even when the uGUI widget is outside the screen.
+This check is performed always (per frame), even when the uGUI widget is outside the screen. With every "Item in a ScrollView" that has the UICullingBehaviour, you add a (small) performance overhead due to the rect-check, which means the Component is not a silver-bullet that allows you to have an "infinite" amount of items at no performance cost.
 
 It seems I can't get rid of the per-frame check, because Unity doesn't provide a callback when a Transform position changed. If you know how to get rid of it, please open an issue item and let me know how that would work.
 
