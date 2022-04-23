@@ -1,8 +1,8 @@
 # UI Culling for Unity
 
-This package provides a Component that checks whether an uGUI widget is inside a specific RectTransform and allows to trigger OnBecameVisible and OnBecameInvisible magic-methods and events.
+This package provides a Component that checks whether an uGUI widget is inside a specific RectTransform and allows to trigger OnBecameVisible and OnBecameInvisible magic-methods and uGUI events.
 
-These events are often useful to toggle expensive logic. For example to disable rendering (eg animated 3D character) to a RenderTexture that's shown in the UI, but was moved outisde the ScrollView.
+These events are often useful to toggle expensive logic. For example to disable rendering to a RenderTexture that's shown in the UI (ie animated 3D character), but was moved outisde the ScrollView.
 
 uGUI doesn't trigger the OnBecameVisible and OnBecameInvisible events on widgets. Unity Technologies was asked to implement it, but it seems they chose not to do it, see [here](https://forum.unity.com/threads/onbecamevisible-does-not-fire-for-canvasrenderers.290641/#post-1918763).
 
