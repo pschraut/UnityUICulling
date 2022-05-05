@@ -37,6 +37,7 @@ Please see the ```CHANGELOG.md``` file to see what's changed in each version.
 
 | Version  |     Link      |
 |----------|---------------|
+| 1.0.0-pre.2 | https://github.com/pschraut/UnityUICulling.git#1.0.0-pre.2 |
 | 1.0.0-pre.1 | https://github.com/pschraut/UnityUICulling.git#1.0.0-pre.1 |
 
 
