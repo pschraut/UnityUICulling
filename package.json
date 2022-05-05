@@ -1,6 +1,6 @@
 {
   "name": "com.oddworm.uiculling",
-  "version": "1.0.0-pre.2",
+  "version": "1.0.0-pre.3",
   "displayName": "UI Culling",
   "description": "UI Culling for Unity allows to trigger OnBecameVisible & OnBecameInvisible events on uGUI widgets.",
   "unity": "2019.3",
