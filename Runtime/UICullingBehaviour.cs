@@ -212,6 +212,7 @@ namespace Oddworm.Framework
                 s_CornerCache[2].y - s_CornerCache[0].y);
         }
 
+#if UNITY_EDITOR
         protected override void OnValidate()
         {
             base.OnValidate();
@@ -220,11 +221,10 @@ namespace Oddworm.Framework
             {
                 m_Rect = GetComponent<RectTransform>();
 
-#if UNITY_EDITOR
                 if (!Application.isPlaying)
                     UnityEditor.EditorUtility.SetDirty(this);
-#endif
             }
         }
+#endif
     }
 }
