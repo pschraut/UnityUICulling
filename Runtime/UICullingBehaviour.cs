@@ -186,7 +186,12 @@ namespace Oddworm.Framework
         protected bool CalculateVisibility()
         {
             var rect = GetWorldRect(m_Rect);
+            if (rect.width <= 0 || rect.height <= 0)
+                return false;
+
             var viewport = GetWorldRect(m_Viewport);
+            if (viewport.width <= 0 || viewport.height <= 0)
+                return false;
 
             var visible = rect.Overlaps(viewport);
             return visible;
