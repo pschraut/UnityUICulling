@@ -185,6 +185,9 @@ namespace Oddworm.Framework
         /// <returns>true when visible, false otherwise.</returns>
         protected bool CalculateVisibility()
         {
+			if (m_Rect == null || m_Viewport == null)
+				return false;
+
             var rect = GetWorldRect(m_Rect);
             if (rect.width <= 0 || rect.height <= 0)
                 return false;
