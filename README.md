@@ -1,6 +1,6 @@
 # UI Culling for Unity
 
-This package provides a Component to trigger OnBecameVisible / OnBecameInvisible magic-methods and events, when an uGUI widget enters and exits a specific RectTransform.
+This package provides a Component to trigger OnBecameVisible / OnBecameInvisible magic-methods and events, when a uGUI widget enters and exits a specific RectTransform.
 
 These events are often useful to toggle expensive logic. For example to disable a Camera that renders to a RenderTexture to display animated 3D characters in the UI, but was moved outisde the visible area of a ScrollView.
 
@@ -22,9 +22,9 @@ The ```UICullingBehaviour``` Component is used to trigger these OnBecameVisible 
 | ```Rect``` | A reference to a RectTransform whose rectangle is used to test whether it's inside the ```Viewport```, in which case the Rect is considered visible. Only spatial checks are performed, alpha/transparency isn't considered. |
 | ```Viewport``` | A reference to a RectTransform that represents the viewport, for example the visible area of a ScrollView. See above ```Rect``` description. |
 | ```Message Mode``` | Unity features the [OnBecameVisible](https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnBecameVisible.html) and [OnBecameInvisible](https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnBecameInvisible.html) magic-methods. This property allows you to call them.<br><br>```Send``` will perform a [GameObject.SendMessage](https://docs.unity3d.com/ScriptReference/GameObject.SendMessage.html) on the gameObject where the UICullingBehaviour is added to.<br>```Broadcast``` will perform a [GameObject.BroadcastMessage](https://docs.unity3d.com/ScriptReference/GameObject.BroadcastMessage.html) on the gameObject where the UICullingBehaviour is added to.<br>```None``` will not Send/Broadcast any message. |
-| ```On Visible Changed``` | An Unity Event that can be used to set up method callbacks through the Inspector. It's called when the ```Rect``` becomes visible or invisible in the ```Viewport```.  This event is raised even when ```Message Mode```is set to ```None```. |
-| ```On Became Visible``` | An Unity Event that can be used to set up method callbacks through the Inspector. It's called when the ```Rect``` entered the ```Viewport```.  This event is raised even when ```Message Mode```is set to ```None```. |
-| ```On Became Invisible``` | An Unity Event that can be used to set up method callbacks through the Inspector. It's called when the ```Rect``` exited ```Viewport```. This event is raised even when ```Message Mode```is set to ```None```. |
+| ```On Visible Changed``` | A Unity Event that can be used to set up method callbacks through the Inspector. It's called when the ```Rect``` becomes visible or invisible in the ```Viewport```.  This event is raised even when ```Message Mode```is set to ```None```. |
+| ```On Became Visible``` | A Unity Event that can be used to set up method callbacks through the Inspector. It's called when the ```Rect``` entered the ```Viewport```.  This event is raised even when ```Message Mode```is set to ```None```. |
+| ```On Became Invisible``` | A Unity Event that can be used to set up method callbacks through the Inspector. It's called when the ```Rect``` exited ```Viewport```. This event is raised even when ```Message Mode```is set to ```None```. |
 
 # Installation
 
